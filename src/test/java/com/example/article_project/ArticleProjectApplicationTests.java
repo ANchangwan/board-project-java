@@ -22,6 +22,8 @@ class ArticleProjectApplicationTests {
 			.contents("content")
 			.writer("writer")
 			.build();
+
+			
 			article.changeContents("1");
 			article.changeTitle("채식주의");
 			article.changeWriter("hello");

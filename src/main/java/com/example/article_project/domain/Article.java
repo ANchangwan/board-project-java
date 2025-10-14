@@ -1,12 +1,18 @@
 package com.example.article_project.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +37,14 @@ public class Article {
 
     @Column(name = "reg_date")
     private LocalDateTime regDate;
+
+    @ElementCollection
+    @CollectionTable(name = "attachment", joinColumns = @JoinColumn(name="id"))
+    @OrderColumn(name="order_index")
+    @Builder.Default
+    List<Attachment> files = new ArrayList<>();
+
+
 
     public void changeContents(String contents){
         this.contents = contents;

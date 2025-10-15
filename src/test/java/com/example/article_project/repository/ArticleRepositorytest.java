@@ -2,6 +2,7 @@ package com.example.article_project.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
+
+import org.assertj.core.api.Assertions;
+
 
 import com.example.article_project.domain.Article;
 import com.example.article_project.domain.Attachment;
@@ -45,6 +49,70 @@ public class ArticleRepositorytest {
 
        assertThat(article.getId()).isNotNull();
     
+    }
+
+    
+
+    @Test
+    void testFindArticleById(){
+        // given
+        Long articleId = 2L;
+        
+        // when
+        Article article = articleRepository.findArticleById(articleId);
+
+        log.info("id : {}",article.getId());
+        log.info("title : {}", article.getTitle());
+        log.info("contents : {}", article.getContents());
+
+
+        //then
+        assertThat(article.getId()).isEqualTo(2L);
+        // assertThat(article.getFiles()).hasSize(3);
+    }
+
+      @Test
+    @Rollback(false)
+    void registerArticle_savesArticleAndReturnsId() {
+
+        List<Article> articles = new ArrayList<>();
+        for(int i =1; i <= 125; i++){
+            Article article = Article.builder()
+            .title("title " + i )
+            .contents("contents " + i)
+            .writer("writer " + i)
+            .regDate(LocalDateTime.now())
+            .build();
+
+            articles.add(article);
+        }
+        System.out.println("article size : " + articles.size());
+        articleRepository.saveAll(articles);
+
+        Assertions.assertThat(articles).hasSize(125);
+
+
+    }
+
+    @Test
+    void TestGetFileCount(){
+        Long articleId = 2L;
+
+        //when
+        int fileCount = articleRepository.getFileCount(articleId);
+
+        log.info("fileCount : {}", fileCount);
+    }
+
+    @Test
+    void testFindArticleWithfirstFile(){
+        Long articleId = 3L;
+
+        Article article = articleRepository.findArticleWithFirstFile(articleId);
+
+        assertThat(article.getId()).isNotNull();
+
+        assertThat(article.getFiles()).hasSize(1); 
     }
     
 }

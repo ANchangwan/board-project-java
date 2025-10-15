@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.article_project.domain.Article;
 import com.example.article_project.dto.ArticleDto;
+import com.example.article_project.dto.PageRequestDto;
+import com.example.article_project.dto.PageResponseDto;
 import com.example.article_project.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,18 @@ import lombok.extern.slf4j.Slf4j;
 public class ArticleController {
 
     private final ArticleService articleService;
+
+    @GetMapping("/articles")
+    public ResponseEntity<PageResponseDto<ArticleDto>> paging(PageRequestDto pageRequestDto){
+
+        PageResponseDto<ArticleDto> pageResponseDto = articleService.paging(pageRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(pageResponseDto);
+    }
+
+
+
+
 
     // 게시글 등록
     @PostMapping("/articles")

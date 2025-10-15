@@ -2,8 +2,13 @@ package com.example.article_project.service;
 
 import com.example.article_project.domain.Article;
 import com.example.article_project.dto.ArticleDto;
+import com.example.article_project.dto.PageRequestDto;
+import com.example.article_project.dto.PageResponseDto;
 
 public interface ArticleService {
+      
+      // 페이징 처리<
+      PageResponseDto<ArticleDto> paging(PageRequestDto pageRequestDto);
 
       // 게시글 등록
       Long registerArticle(ArticleDto article);

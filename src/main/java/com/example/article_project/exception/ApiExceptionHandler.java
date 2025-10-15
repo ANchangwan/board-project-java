@@ -15,9 +15,11 @@ public class ApiExceptionHandler {
     // exception handler method
     @ExceptionHandler(value = Exception.class) 
     public ResponseEntity<ErrorResponse> handleException(HttpServletRequest req, Exception ex) {
+
         log.error("uri : {}", req.getRequestURI());
         log.error("method : {}", req.getMethod());
         log.error("error : {}", ex.getMessage());
+
         System.out.println("uri : " + req.getRequestURI() + 
                            ", method : " + req.getMethod() + 
                            ", ex : " + ex.getMessage());

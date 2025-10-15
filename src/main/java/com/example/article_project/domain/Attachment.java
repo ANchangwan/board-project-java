@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor                                                                                                                                                        
 public class Attachment {
     private String fileName;
     private String filePath;

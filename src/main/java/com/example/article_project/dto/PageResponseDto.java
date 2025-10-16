@@ -33,43 +33,51 @@ public class PageResponseDto<T>{
 
 
     @Builder
-    public PageResponseDto(List<T> dtoList, PageRequestDto pageRequestDto, int totalCount){
+    public PageResponseDto(List<T> dtoList, PageRequestDto pageRequestDto, int totalCount) {
         this.dtoList = dtoList;
         this.pageRequestDto = pageRequestDto;
         this.totalCount = totalCount;
 
         this.currentPage = pageRequestDto.getPage();
-
         this.size = pageRequestDto.getSize();
 
-        // 현재 페이지 번호가 숙련 페이지 블록의 마지막 페이지 번호 계산
-        end = (int)Math.ceil(currentPage / (double) pageSize) * pageSize;
+        // 한 블록당 표시할 페이지 수 (예: 10)
+        int pageBlockSize = 10;
 
-        log.info("end : {}", end);
+        // 현재 페이지가 속한 블록의 마지막 페이지 번호
+        end = (int) Math.ceil((double) currentPage / pageBlockSize) * pageBlockSize;
 
-        start = end - (pageSize - 1);
+        // 현재 블록의 시작 페이지 번호
+        start = end - (pageBlockSize - 1);
 
-        log.info("start : {}", end);
+        // 전체 페이지 수
+        totalPage = (int) Math.ceil((double) totalCount / size);
 
-        // 총 페이지 수중 계산한다.
-        int lastPage = (int) Math.ceil(totalCount /(double) size);
+        // 마지막 페이지 초과 시 end 조정
+        if (end > totalPage) {
+            end = totalPage;
+        }
 
-        this.totalPage = lastPage;
-        end = end > lastPage ? lastPage : end;
+        // 이전 / 다음 블록 존재 여부
+        prev = start > 1;
+        next = totalCount > (end * size);
 
-        this.prev = start > 1;
+        // 페이지 번호 목록 생성
+        pageNumList = IntStream.rangeClosed(start, end)
+                .boxed()
+                .collect(Collectors.toList());
 
-        this.next = totalCount > (end * size);
-        log.info("next : {}", next);
+        // 이전 / 다음 페이지 번호 계산
+        prevPage = prev ? start - 1 : 0;
+        nextPage = next ? end + 1 : 0; // end - 1 → end + 1 로 수정
 
-        this.pageNumList = IntStream.range(start, end + 1).boxed().collect(Collectors.toList());
-        log.info("pageNumList : {}", pageNumList);
-
-        this.prevPage = prev ? start - 1 : 0;
-        log.info("prevPage : {}", prevPage);
-
-        this.nextPage = next ? end - 1 : 0;
-        log.info("nextPage : {}", nextPage);
+        // 디버깅 로그
+        log.info("currentPage: {}, size: {}, totalCount: {}", currentPage, size, totalCount);
+        log.info("start: {}, end: {}, totalPage: {}", start, end, totalPage);
+        log.info("prev: {}, next: {}", prev, next);
+        log.info("pageNumList: {}", pageNumList);
+        log.info("prevPage: {}, nextPage: {}", prevPage, nextPage);
     }
+
 
 }

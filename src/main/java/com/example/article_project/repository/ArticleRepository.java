@@ -9,7 +9,7 @@ import com.example.article_project.domain.Article;
 
 
 @Repository
-public interface ArticleRepository extends JpaRepository<Article, Long> {
+public interface ArticleRepository extends JpaRepository<Article, Long>, CustomArticleRepository {
 
     @Query("select a from Article AS a where a.id = :articleId")
     Article findArticleById(@Param("articleId") Long id);

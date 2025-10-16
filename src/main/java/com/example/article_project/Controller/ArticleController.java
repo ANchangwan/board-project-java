@@ -42,8 +42,6 @@ public class ArticleController {
 
 
 
-
-
     // 게시글 등록
     @PostMapping("/articles")
     public ResponseEntity<Map<String, Long>> postArticle(@RequestBody ArticleDto articleDto){
@@ -57,7 +55,7 @@ public class ArticleController {
     @GetMapping("/article/{id}")
     public ResponseEntity<ArticleDto> getArticle(@PathVariable(value = "id") Long id){
         ArticleDto articleDto = articleService.findByArticle(id);
-
+        System.out.println("here");
         return ResponseEntity.status(HttpStatus.OK).body(articleDto);
     }
 
